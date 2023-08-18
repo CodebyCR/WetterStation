@@ -1,0 +1,14 @@
+
+# JetBrains
+.idea
+*.iml
+*.iws
+*.ipr
+
+# vs code
+.vscode
+
+# Mac OS
+.DS_Store
+
+

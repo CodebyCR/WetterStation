@@ -1,4 +1,4 @@
-package utilities.envParser;
+package environment.utilities.envParser;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;

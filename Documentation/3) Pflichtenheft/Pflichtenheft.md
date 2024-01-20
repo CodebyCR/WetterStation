@@ -1,4 +1,4 @@
-# Pflichtenheft
+
 ## Mockups
 
 ###  Applikation Mockup

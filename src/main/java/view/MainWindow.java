@@ -1,11 +1,17 @@
 package view;
 
+import controller.CreateReportController;
+import controller.ViewDataController;
+import environment.Column;
 import environment.UI;
 import model.Station;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 
 public final class MainWindow extends JFrame{
@@ -82,6 +88,11 @@ public final class MainWindow extends JFrame{
         final var csvUploadButton = new JButton();
         csvUploadButton.setText(".csv Upload");
         csvUploadButton.setBounds(UI.FULL_WIDTH / 5 * 4, 15, UI.FULL_WIDTH / 5, UI.HEADER_HEIGHT / 2);
+        csvUploadButton.setBackground(Color.blue);
+        csvUploadButton.setForeground(Color.white);
+        csvUploadButton.setBorderPainted(false);
+        csvUploadButton.setOpaque(true);
+        csvUploadButton.setVisible(true);
 //        csvUploadButton.setBorder(BorderFactory.createLineBorder(Color.black, 1, true));
 //        csvUploadButton.setVisible(true);
         csvUploadButton.addActionListener(on_upload -> {
@@ -97,15 +108,32 @@ public final class MainWindow extends JFrame{
 
     private StationTable addStationTable() {
         final Object[][] demoModel = Station.getDemoModel();
-        final StationTable stationTable = new StationTable(demoModel,
-                new String[]{"Name", "Datum", "Daten einsehen", "Bericht erstellen"});
+
+        final DefaultTableModel model = new DefaultTableModel(demoModel, new String[]{"Name", "Datum", "Daten einsehen", "Bericht erstellen"});
+
+        final StationTable stationTable = new StationTable(model);
+        stationTable.setDefaultEditor(Object.class, null);
+        stationTable.setRowSelectionAllowed(true);
+        stationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+//        ButtonColumn buttonColumn = new ButtonColumn(stationTable, delete, 2);
+//        buttonColumn.setMnemonic(KeyEvent.VK_D);
+
+        final ViewDataController viewDataController = new ViewDataController();
+        final ButtonColumn viewDataColumn = new ButtonColumn(stationTable, viewDataController, Column.VIEW_DATA);
+        viewDataColumn.setMnemonic(KeyEvent.VK_D);
+
+        final CreateReportController createReportController = new CreateReportController();
+        final ButtonColumn createReportColumn = new ButtonColumn(stationTable, createReportController, Column.STATION_REPORT);
+        createReportColumn.setMnemonic(KeyEvent.VK_D);
 
 
-        final TableColumnModel columnModel = stationTable.getColumnModel();
-        columnModel
-                .getColumns()
-                .asIterator()
-                .forEachRemaining(dataColumn -> dataColumn.setWidth(UI.COLUMN_WIDTH));
+//        final TableColumnModel columnModel = stationTable.getColumnModel();
+//        columnModel.setColumnMargin(2);
+//        columnModel
+//                .getColumns()
+//                .asIterator()
+//                .forEachRemaining(dataColumn -> dataColumn.setWidth(UI.COLUMN_WIDTH));
 
 
         final var scrollPane = new JScrollPane();

@@ -51,8 +51,8 @@ public final class Station{
         for (int i = 0; i < stationDemoList.size(); i++) {
             demoModel[i][0] = stationDemoList.get(i).getName();
             demoModel[i][1] = stationDemoList.get(i).getDate();
-            demoModel[i][2] = "Daten einsehen";
-            demoModel[i][3] = "Bericht erstellen";
+            demoModel[i][2] = stationDemoList.get(i); // "Daten einsehen";
+            demoModel[i][3] = stationDemoList.get(i); // "Bericht erstellen";
         }
 
         return demoModel;
@@ -68,5 +68,13 @@ public final class Station{
                 """.formatted(id, name, date);
     }
 
+//    public Station fromString(final String stationString){
+//        final String[] stationStringArray = stationString.split("\n");
+//        final String id = stationStringArray[1].split(": ")[1].replace("\"", "");
+//        final String name = stationStringArray[2].split(": ")[1].replace("\"", "");
+//        final long date = Long.parseLong(stationStringArray[3].split(": ")[1].replace("\"", ""));
+//
+//        return new Station(name, date);
+//    }
 
 }

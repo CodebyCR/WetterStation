@@ -4,14 +4,15 @@ import environment.UI;
 import model.Station;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public final class StationTable extends JTable {
 
-    public StationTable(final Object[][] model,
-                        final String[] header) {
-        super(model, header);
-        this.setDefaultRenderer(Station.class, new StationRender());
+    public StationTable(final DefaultTableModel model) {
+        super(model);
+        final StationRender currentStationRenderer = new StationRender();
+        this.setDefaultRenderer(Station.class, currentStationRenderer);
         this.setBounds(UI.TABLE_MARGIN, 60, UI.FULL_WIDTH - UI.TABLE_MARGIN * 2 , UI.FULL_HEIGHT - 100);
         this.setOpaque(true);
         this.setBackground(Color.white);

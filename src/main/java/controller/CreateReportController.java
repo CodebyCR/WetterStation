@@ -1,6 +1,5 @@
 package controller;
 
-import environment.Column;
 import model.Station;
 import view.modal.ModalReportWindow;
 
@@ -12,7 +11,8 @@ public class CreateReportController extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         final JTable table = (JTable)e.getSource();
         final int modelRowIndex = Integer.parseInt( e.getActionCommand() );
-        final var station = (Station) table.getModel().getValueAt(modelRowIndex, Column.STATION_REPORT);
+
+        final var station = Station.getDemoList().get(modelRowIndex);
         System.out.println("Create report of station: " + station.getName());
 
         // open new window

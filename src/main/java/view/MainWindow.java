@@ -2,6 +2,7 @@ package view;
 
 import controller.CreateReportController;
 import controller.ViewDataController;
+import environment.CRColor;
 import environment.Column;
 import environment.UI;
 import model.Station;
@@ -88,7 +89,7 @@ public final class MainWindow extends JFrame{
         final var csvUploadButton = new JButton();
         csvUploadButton.setText(".csv Upload");
         csvUploadButton.setBounds(UI.FULL_WIDTH / 5 * 4, 15, UI.FULL_WIDTH / 5, UI.HEADER_HEIGHT / 2);
-        csvUploadButton.setBackground(Color.blue);
+        csvUploadButton.setBackground(CRColor.lightPurple);
         csvUploadButton.setForeground(Color.white);
         csvUploadButton.setBorderPainted(false);
         csvUploadButton.setOpaque(true);
@@ -108,13 +109,27 @@ public final class MainWindow extends JFrame{
 
     private StationTable addStationTable() {
         final Object[][] demoModel = Station.getDemoModel();
+        final var header = new String[]{"Name", "Datum", "Daten einsehen", "Bericht erstellen"};
+        final DefaultTableModel model = new DefaultTableModel(demoModel, header);
 
-        final DefaultTableModel model = new DefaultTableModel(demoModel, new String[]{"Name", "Datum", "Daten einsehen", "Bericht erstellen"});
 
         final StationTable stationTable = new StationTable(model);
         stationTable.setDefaultEditor(Object.class, null);
         stationTable.setRowSelectionAllowed(true);
         stationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        stationTable.setToolTipText("This is a tip.");
+
+        // set ToolTip for row
+        stationTable.setRowHeight(50);
+        stationTable.setRowMargin(10);
+        stationTable.setFillsViewportHeight(true);
+        stationTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        stationTable.setShowHorizontalLines(true);
+        stationTable.setShowVerticalLines(false);
+
+        // set color of selceted row
+        stationTable.setSelectionBackground(CRColor.purple);
+        stationTable.setSelectionForeground(Color.white);
 
 //        ButtonColumn buttonColumn = new ButtonColumn(stationTable, delete, 2);
 //        buttonColumn.setMnemonic(KeyEvent.VK_D);

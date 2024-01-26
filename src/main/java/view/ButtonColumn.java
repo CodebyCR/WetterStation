@@ -1,5 +1,7 @@
 package view;
 
+import environment.CRColor;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -151,8 +153,10 @@ public class ButtonColumn extends AbstractCellEditor
     {
         if (isSelected)
         {
-            renderButton.setForeground(table.getSelectionForeground());
-            renderButton.setBackground(table.getSelectionBackground());
+            renderButton.setForeground(CRColor.purple);
+            renderButton.setBackground(Color.white);
+//            renderButton.setForeground(table.getSelectionForeground());
+//            renderButton.setBackground(table.getSelectionBackground());
         }
         else
         {

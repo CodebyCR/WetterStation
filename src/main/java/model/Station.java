@@ -40,19 +40,26 @@ public final class Station{
         return name;
     }
 
-    public static Object[][] getDemoModel(){
+
+    public static ArrayList<Station> getDemoList(){
         final var stationDemoList = new ArrayList<Station>();
         stationDemoList.add(new Station("Hamburg", System.currentTimeMillis()));
         stationDemoList.add(new Station("Berlin", System.currentTimeMillis()));
         stationDemoList.add(new Station("München", System.currentTimeMillis()));
+
+        return stationDemoList;
+    }
+
+    public static Object[][] getDemoModel(){
+        final var stationDemoList = Station.getDemoList();
 
         final Object[][] demoModel = new Object[stationDemoList.size()][4];
 
         for (int i = 0; i < stationDemoList.size(); i++) {
             demoModel[i][0] = stationDemoList.get(i).getName();
             demoModel[i][1] = stationDemoList.get(i).getDate();
-            demoModel[i][2] = stationDemoList.get(i); // "Daten einsehen";
-            demoModel[i][3] = stationDemoList.get(i); // "Bericht erstellen";
+            demoModel[i][2] = "Daten einsehen";
+            demoModel[i][3] = "Bericht erstellen";
         }
 
         return demoModel;

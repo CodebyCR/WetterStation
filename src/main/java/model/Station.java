@@ -1,8 +1,6 @@
 package model;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -13,17 +11,42 @@ public final class Station{
     final String name;
     final long date;
 
+    final TemperatureModel temperatureModel;
+
     // Constructors
     public Station(final String name,
-                   final long date){
+                   final long date,
+                   final TemperatureModel temperatureModel){
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.date = date;
+        this.temperatureModel = temperatureModel;
+    }
+
+    /**
+     * for database loading
+     */
+    private Station(final String id,
+                   final String name,
+                   final long date){
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.temperatureModel = TemperatureModel.loadById(id);
     }
 
     /////////////////////////////
     /////       Public     /////
     ///////////////////////////
+
+    public static Station loadById(final String id){
+        return new Station(id, "Hamburg", System.currentTimeMillis());
+    }
+
+    public static ArrayList<Station> loadAll(){
+
+        return new ArrayList<Station>();
+    }
 
     public String getDate(){
         final String dateFormat = "dd. MMM yyyy";
@@ -43,9 +66,20 @@ public final class Station{
 
     public static ArrayList<Station> getDemoList(){
         final var stationDemoList = new ArrayList<Station>();
-        stationDemoList.add(new Station("Hamburg", System.currentTimeMillis()));
-        stationDemoList.add(new Station("Berlin", System.currentTimeMillis()));
-        stationDemoList.add(new Station("München", System.currentTimeMillis()));
+        stationDemoList.add(new Station("Hamburg", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Berlin", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("München", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Köln", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Frankfurt", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Stuttgart", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Düsseldorf", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Dortmund", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Essen", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Leipzig", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Bremen", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Dresden", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Hannover", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
+        stationDemoList.add(new Station("Nürnberg", System.currentTimeMillis(), TemperatureModel.getDemoModel()));
 
         return stationDemoList;
     }
@@ -58,11 +92,22 @@ public final class Station{
         for (int i = 0; i < stationDemoList.size(); i++) {
             demoModel[i][0] = stationDemoList.get(i).getName();
             demoModel[i][1] = stationDemoList.get(i).getDate();
-            demoModel[i][2] = "Daten einsehen";
-            demoModel[i][3] = "Bericht erstellen";
+            demoModel[i][2] = "Bericht erstellen";
         }
 
         return demoModel;
+    }
+
+    public TemperatureModel getTemperatureModel(){
+//        final var temperatureModel = TemperatureModel.loadById(id);
+//        return temperatureModel;
+        TemperatureModel temperatureModel = new TemperatureModel();
+        temperatureModel.addEntry(System.currentTimeMillis(), 20.0);
+        temperatureModel.addEntry(System.currentTimeMillis(), 21.0);
+        temperatureModel.addEntry(System.currentTimeMillis(), 22.0);
+        temperatureModel.addEntry(System.currentTimeMillis(), 23.0);
+
+        return temperatureModel;
     }
 
     public String toString(){

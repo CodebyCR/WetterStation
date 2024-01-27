@@ -12,6 +12,8 @@ public final class CRColor {
     public final static Color lightPurple = new Color(150,150,255);
     public final static Color darkPurple = new Color(50,50,150);
 
+    public final static Color lightBlue = new Color(173,216,255);
+
 
 
 }

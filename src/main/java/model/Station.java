@@ -101,11 +101,35 @@ public final class Station{
     public TemperatureModel getTemperatureModel(){
 //        final var temperatureModel = TemperatureModel.loadById(id);
 //        return temperatureModel;
+
+        final long oneHour = 3600000;
+        final long midnight = System.currentTimeMillis() - (System.currentTimeMillis() % 86400000) - 3600000;
         TemperatureModel temperatureModel = new TemperatureModel();
-        temperatureModel.addEntry(System.currentTimeMillis(), 20.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 21.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 22.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 23.0);
+        temperatureModel.addEntry(midnight, 15.0);
+        temperatureModel.addEntry(midnight + oneHour, 16.0);
+        temperatureModel.addEntry(midnight + oneHour*2, 17.0);
+        temperatureModel.addEntry(midnight + oneHour*3, 18.0);
+        temperatureModel.addEntry(midnight + oneHour*4, 17.0);
+        temperatureModel.addEntry(midnight + oneHour*5, 15.0);
+        temperatureModel.addEntry(midnight + oneHour*6, 16.0);
+        temperatureModel.addEntry(midnight + oneHour*7, 17.0);
+        temperatureModel.addEntry(midnight + oneHour*8, 18.0);
+        temperatureModel.addEntry(midnight + oneHour*9, 16.0);
+        temperatureModel.addEntry(midnight + oneHour*10, 15.0);
+        temperatureModel.addEntry(midnight + oneHour*11, 16.0);
+        temperatureModel.addEntry(midnight + oneHour*12, 17.0);
+        temperatureModel.addEntry(midnight + oneHour*13, 18.0);
+        temperatureModel.addEntry(midnight + oneHour*14, 16.0);
+        temperatureModel.addEntry(midnight + oneHour*15, 15.0);
+        temperatureModel.addEntry(midnight + oneHour*16, 10.0);
+        temperatureModel.addEntry(midnight + oneHour*17, 17.0);
+        temperatureModel.addEntry(midnight + oneHour*18, 18.0);
+        temperatureModel.addEntry(midnight + oneHour*19, 20.0);
+        temperatureModel.addEntry(midnight + oneHour*20, -5.0);
+        temperatureModel.addEntry(midnight + oneHour*21, 16.0);
+        temperatureModel.addEntry(midnight + oneHour*22, 15.0);
+        temperatureModel.addEntry(midnight + oneHour*23, 15.0);
+        temperatureModel.addEntry(midnight + oneHour*24, 14.0);
 
         return temperatureModel;
     }
@@ -119,6 +143,8 @@ public final class Station{
                 }
                 """.formatted(id, name, date);
     }
+
+    // bei filterung object mit original model vergleichen und dessen index zurückgeben
 
 //    public Station fromString(final String stationString){
 //        final String[] stationStringArray = stationString.split("\n");

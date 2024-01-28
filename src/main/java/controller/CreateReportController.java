@@ -17,7 +17,7 @@ public class CreateReportController extends AbstractAction {
 
         // open new window
         final var createReportWindow = new ModalReportWindow(station);
-        createReportWindow.ini();
+//        createReportWindow.ini();
 
 
 

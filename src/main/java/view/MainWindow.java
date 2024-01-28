@@ -155,11 +155,39 @@ public final class MainWindow extends JFrame{
             final var stationReport = selectedStation.getTemperatureModel();
             stationReport.addEntry(System.currentTimeMillis(), 20.0);
 
+
             final var currentStationHeader = new String[]{"Datum", "Temperatur"};
-            final DefaultTableModel stationDataModel = new DefaultTableModel(stationReport.toObjectMatrix(), currentStationHeader);
+            // set header color
+
+
+            final DefaultTableModel stationDataModel = new DefaultTableModel(stationReport.toHumanReadableObjectMatrix(), currentStationHeader);
             // set header
             stationDataModel.setColumnIdentifiers(currentStationHeader);
             currentStationTable.setModel(stationDataModel);
+
+            // set header font size
+            final JTableHeader tableHeader = new JTableHeader();
+            tableHeader.setFont(tableHeader.getFont().deriveFont(16.0f));
+            tableHeader.setForeground(Color.white);
+            tableHeader.setBackground(Color.BLUE);
+            tableHeader.setOpaque(true);
+            tableHeader.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1, true));
+            tableHeader.setVisible(true);
+
+            currentStationTable.setTableHeader(tableHeader);
+
+
+            // align centered in cell
+            final var centerRenderer = new DefaultTableCellRenderer();
+            centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+            final var currentModel = currentStationTable.getColumnModel();
+            if(currentModel.getColumnCount() > 0){
+                for (int i = 0; i < currentModel.getColumnCount(); i++) {
+                    currentModel.getColumn(i).setCellRenderer(centerRenderer);
+
+                }
+            }
+
         });
 
         final JTableHeader tableHeader = new JTableHeader();
@@ -231,6 +259,11 @@ public final class MainWindow extends JFrame{
         currentStationTable.setDefaultEditor(Object.class, null);
         currentStationTable.setRowSelectionAllowed(true);
         currentStationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+
+        // center coulumns
+
+
 //        stationTable.setToolTipText("This is a tip.");
 
         scrollPane.setViewportView(currentStationTable);

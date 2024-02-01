@@ -1,5 +1,10 @@
 package environment;
 
+import java.awt.*;
+
+import static environment.CRColor.coldBlue;
+import static environment.CRColor.hotRed;
+
 public final class UI {
     public final static int FULL_WIDTH = 800;
     public final static int FULL_HEIGHT = 600;
@@ -9,4 +14,10 @@ public final class UI {
 
     public final static int SELECTION_FOOTER_HEIGHT = 140;
     public final static int TABLE_HEIGHT = FULL_HEIGHT - HEADER_HEIGHT - SELECTION_FOOTER_HEIGHT;
+
+    public final static String FONT = "Arial"; // "Helvetica"; //"Times New Roman"; // "Arial" "Helvetica"
+
+    public final static Color secundaryColor = CRColor.aczentBlue;//CRColor.cyan;
+    public final static Color primaryColor = CRColor.blue;
+
 }

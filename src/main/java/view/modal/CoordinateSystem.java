@@ -1,13 +1,18 @@
 package view.modal;
 
 import environment.CRColor;
+import environment.UI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static environment.CRColor.coldBlue;
+import static environment.CRColor.hotRed;
+
 public class CoordinateSystem extends JPanel {
     private final static float fontSize = 14.0f;
+    private final int coordinateSystemWidth;
 
     ///////////////////////////////////////////////
     private final ArrayList<Point> points;
@@ -33,6 +38,7 @@ public class CoordinateSystem extends JPanel {
         this.width = width;
         this.height = height;
         this.showGrid = showGrid;
+        this.coordinateSystemWidth = width - 50;
 
         init();
     }
@@ -47,6 +53,7 @@ public class CoordinateSystem extends JPanel {
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         // Now you can use the graphics object to draw your axes
+        drawGradient(graphics);
         drawAxes(graphics);
 //        drawAxesStartLabel(graphics);
         drawYAxisLabels(graphics);
@@ -56,9 +63,18 @@ public class CoordinateSystem extends JPanel {
 
     }
 
+    private void drawGradient(Graphics graphics) {
+        final var g2d = (Graphics2D) graphics;
+        final var gradient = new GradientPaint(0, 0,
+                CRColor.setAlpha(hotRed, 100), 0, height,
+                CRColor.setAlpha(coldBlue, 100));
+        g2d.setPaint(gradient);
+        g2d.fillRect(0, 0, width , height);
+    }
+
     private void drawAxes(Graphics graphics) {
         graphics.setColor(Color.BLACK);
-        graphics.drawLine(50, height - 50, width - 20, height - 50); // x-axis
+        graphics.drawLine(50, height - 50, width - 50, height - 50); // x-axis
         graphics.drawLine(50, height - 50, 50, 50); // y-axis
     }
 
@@ -71,17 +87,17 @@ public class CoordinateSystem extends JPanel {
     }
 
     private void drawYAxisLabels(Graphics graphics) {
-        final int xPosition = 10;
+        final int xPosition = 8;
         // dark purple & monospace
-        graphics.setFont(graphics.getFont().deriveFont( 15.0F));
-        graphics.setColor(new Color(128, 0, 128));
+        graphics.setFont(new Font(UI.FONT, Font.BOLD, 14));
 
-        graphics.drawString("-10°C", xPosition, height - 45);
-        // dark blue
-        graphics.setColor(new Color(0, 0, 128));
+        graphics.setColor(coldBlue);
+        graphics.drawString("-10°C", xPosition , height - 45);
+
+        graphics.setColor(new Color(0, 0, 255));
         graphics.drawString(" 0°C", xPosition + 8, height - 95);
         // blue
-        graphics.setColor(new Color(0, 0, 255));
+        graphics.setColor(new Color(0, 128, 255));
         graphics.drawString(" 10°C", xPosition, height - 145);
         // dark yellow
         graphics.setColor(new Color(0, 128, 0));
@@ -94,18 +110,19 @@ public class CoordinateSystem extends JPanel {
         graphics.drawString(" 40°C", xPosition, height - 295);
 
         graphics.setColor(Color.GRAY);
-        graphics.drawString("Temperatur", xPosition, 40);
+        graphics.drawString("Temperatur", xPosition, 35);
     }
 
     private void drawXAxisLabels(Graphics graphics) {
         graphics.setColor(Color.BLACK);
+        graphics.setFont(new Font(UI.FONT, Font.BOLD, 14));
 
-        graphics.drawString("0 Uhr", 40, height - 30);
-        graphics.drawString("12 Uhr", width / 2 - 4, height - 30);
-        graphics.drawString("24 Uhr", width - 44, height - 30);
+        graphics.drawString("0 Uhr", 35, height - 30);
+        graphics.drawString("12 Uhr", width / 2 - 25, height - 30);
+        graphics.drawString("24 Uhr", coordinateSystemWidth - 25, height - 30);
 
         graphics.setColor(Color.GRAY);
-        graphics.drawString("Zeit", width / 2 - 4, height - 15); // x-axis
+        graphics.drawString("Zeit", width / 2 - 18, height - 15); // x-axis
     }
 
 
@@ -114,6 +131,8 @@ public class CoordinateSystem extends JPanel {
     private void drawGrid(Graphics graphics) {
         graphics.setColor(Color.LIGHT_GRAY);
 
+
+
         // draw 5 horizontal lines for x axis
         for (int i = 0; i < height - 50; i += 50) {
             final var lineHeight = height - 50 - i;
@@ -121,21 +140,28 @@ public class CoordinateSystem extends JPanel {
             if(lineHeight < 40){
                 continue;
             }
-            graphics.drawLine(50, height - 50 - i, width - 20, lineHeight); // x-axis
+            graphics.drawLine(50, height - 50 - i, coordinateSystemWidth, lineHeight); // x-axis
         }
 
-        // draw 7 vertical lines for y axis
-        for (int i = 0; i < width - 50; i += 50) {
-            graphics.drawLine(50 + i, height - 50, 50 + i, 50); // y-axis
+        final int vLineSpace = coordinateSystemWidth / 9;
+        // draw 9 vertical lines for y axis
+        for (int i = 0; i < coordinateSystemWidth - 50; i += vLineSpace) {
+            final var lineWidth = 50 + i;
+
+            if(lineWidth < 40){
+                continue;
+            }
+            graphics.drawLine(lineWidth, height - 50, lineWidth, 50); // y-axis
         }
+
     }
 
     private void drawPoints(Graphics graphics) {
         final int pointSize = 8;
         final int pointSizeHalf = pointSize / 2;
         final int yOffset = 100;
-        final int xOffset = 62 - pointSizeHalf;
-        final int coordinateSystemWidth = 301;
+        final int xOffset = 67 - pointSizeHalf;
+//        final int coordinateSystemWidth = 301;
         final double hourCount = 24.0;
 
         final var pointList = new ArrayList<Point>();
@@ -144,7 +170,7 @@ public class CoordinateSystem extends JPanel {
             final var rawTemp2 = nextPoint.y;
             final var temp2 = (rawTemp2 *5) + yOffset + pointSizeHalf;
             final var rawHour2 = nextPoint.x;
-            final var faktor2 = coordinateSystemWidth / hourCount ;
+            final var faktor2 = (coordinateSystemWidth -53) / hourCount ;
             final var hour2 = (int) (rawHour2 * faktor2) + xOffset ;
 
             pointList.add(new Point(hour2, height - temp2));

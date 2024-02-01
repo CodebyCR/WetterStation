@@ -1,24 +1,24 @@
 package view.modal;
 
 
+import environment.UI;
 import model.Station;
 import model.TemperatureModel;
 import model.template.Pair;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Comparator;
 
 public class ModalReportWindow extends JFrame {
     /// Constants
 
-    private final static int width = 500;
+    private final static int width = 520;
     private final static int height = 500;
-    private final static double diagrammScale = 0.75;
-    private final static float titelSize = 20.0f;
-    private final static float fontSize = 14.0f;
+    private final static double diagramScale = 0.75;
+    private final static int titleSize = 20;
+    private final static int fontSize = 14;
     private final static int lineHeight = 24;
     private final static int lineSpace = 5;
 
@@ -41,9 +41,11 @@ public class ModalReportWindow extends JFrame {
         this.station = station;
         this.tempModel = station.getTemperatureModel();
         this.setTitle("Tagesbericht");
+        this.setFont(new Font("Arial", Font.PLAIN, 16));
         this.setSize(width, height);
         this.setVisible(true);
         this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
+        this.setResizable(false);
         init();
     }
 
@@ -59,34 +61,32 @@ public class ModalReportWindow extends JFrame {
         stationNameLabel.setBounds(0, 0, width, lineHeight + lineSpace);
         stationNameLabel.setHorizontalAlignment(JLabel.CENTER);
         stationNameLabel.setVerticalAlignment(JLabel.CENTER);
-        stationNameLabel.setFont(stationNameLabel.getFont().deriveFont(titelSize));
+        stationNameLabel.setFont(new Font(UI.FONT, Font.PLAIN, titleSize));
         stationNameLabel.setForeground(Color.black);
         createReportPanel.add(stationNameLabel);
 
         final int indent = 10;
         // Min, Max and Average Temperature
         final var minTempLabel = new JLabel();
-        minTempLabel.setText("Minimal Temperature: " + station.getTemperatureModel().getMin() + "°C");
-        minTempLabel.setBounds(indent, lineHeight + lineSpace, width, lineHeight);
-        minTempLabel.setFont(minTempLabel.getFont().deriveFont(fontSize));
+        minTempLabel.setText("Min.  Temperature:          " + station.getTemperatureModel().getMin() + "°C");
+        minTempLabel.setFont(new Font(UI.FONT, Font.PLAIN, fontSize));
         minTempLabel.setForeground(Color.black);
+        minTempLabel.setBounds(indent, lineHeight + lineSpace, width, lineHeight);
         createReportPanel.add(minTempLabel);
 
         final var maxTempLabel = new JLabel();
-        maxTempLabel.setText("Maximal Temperature: " + station.getTemperatureModel().getMax() + "°C");
+        maxTempLabel.setText("Max. Temperature:          " + station.getTemperatureModel().getMax() + "°C");
         maxTempLabel.setBounds(indent, lineHeight * 2 + lineSpace, width, lineHeight);
-        maxTempLabel.setFont(maxTempLabel.getFont().deriveFont(fontSize));
         maxTempLabel.setForeground(Color.black);
+        maxTempLabel.setFont(new Font(UI.FONT, Font.PLAIN, fontSize));
         createReportPanel.add(maxTempLabel);
 
         final var avgTempLabel = new JLabel();
-        avgTempLabel.setText("Durchschnittliche Temperature: " + station.getTemperatureModel().getAverage() + "°C");
+        avgTempLabel.setText("Ø      Temperature:          " + station.getTemperatureModel().getAverage() + "°C");
         avgTempLabel.setBounds(indent, lineHeight * 3 + lineSpace, width, lineHeight);
-        avgTempLabel.setFont(avgTempLabel.getFont().deriveFont(fontSize));
         avgTempLabel.setForeground(Color.black);
+        avgTempLabel.setFont(new Font(UI.FONT, Font.PLAIN, fontSize));
         createReportPanel.add(avgTempLabel);
-
-        // Graph data
 
 
         // Fix Graph
@@ -99,11 +99,15 @@ public class ModalReportWindow extends JFrame {
                 30,
                 xDateOrigin,
                 xDateOrigin + 86400000,
-                374, //(int) (width * diagrammScale), // 500 * 0.75 = 375
+                width, //(int) (width * diagrammScale), // 500 * 0.75 = 375
                 374, //(int) (height * diagrammScale), // 500 * 0.75 = 375
                 true
         );
-        graphPanel.setBounds(0, lineHeight * 4 + lineSpace, (int) (width * diagrammScale), (int) (height * diagrammScale)); // Adjust size here
+        graphPanel.setBounds(0, lineHeight * 4 + lineSpace, width, (int) (height * diagramScale) ); // Adjust size here
+
+        // add border
+//        graphPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
         createReportPanel.add(graphPanel);
 
         // Add vertical temperature label
@@ -125,7 +129,7 @@ public class ModalReportWindow extends JFrame {
     private ArrayList<Point> getGraphPoints(){
         final var graphPoints = new ArrayList<Point>();
 
-        final int diagrammHeight = (int) (height * diagrammScale);
+        final int diagrammHeight = (int) (height * diagramScale);
 //        final int diagrammWidth = (int) (width * diagrammScale);
 
         final double yScale = getYTempScale();
@@ -157,8 +161,8 @@ public class ModalReportWindow extends JFrame {
             protected void paintComponent(Graphics diagrammGraphic) {
                 super.paintComponent(diagrammGraphic);
 
-                final int diagrammHeight = (int) (height * diagrammScale);
-                final int diagrammWidth = (int) (width * diagrammScale);
+                final int diagrammHeight = (int) (height * diagramScale);
+                final int diagrammWidth = (int) (width * diagramScale);
 
                 // Draw x and y axes
                 diagrammGraphic.setColor(Color.BLACK);
@@ -217,25 +221,8 @@ public class ModalReportWindow extends JFrame {
 
             }
         };
-        graphPanel.setBounds(0, lineHeight * 4 + lineSpace, (int) (width * diagrammScale), (int) (height * diagrammScale)); // Adjust size here
+        graphPanel.setBounds(0, lineHeight * 4 + lineSpace, (int) (width * diagramScale), (int) (height * diagramScale)); // Adjust size here
         return graphPanel;
     }
 
-
-    // Custom JLabel class for vertical text
-    static class VerticalLabel extends JLabel {
-        VerticalLabel(String text) {
-            super(text);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-            AffineTransform original = g2.getTransform();
-            g2.rotate(-Math.PI / 2);
-            g2.drawString(getText(), -getHeight(), 20);
-            g2.setTransform(original);
-        }
-    }
 }

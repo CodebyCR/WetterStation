@@ -43,10 +43,6 @@ public final class Station{
         return new Station(id, "Hamburg", System.currentTimeMillis());
     }
 
-    public static ArrayList<Station> loadAll(){
-
-        return new ArrayList<Station>();
-    }
 
     public String getDate(){
         final String dateFormat = "dd. MMM yyyy";
@@ -84,6 +80,38 @@ public final class Station{
         return stationDemoList;
     }
 
+    public static Object[][] getDemoModel(final ArrayList<Station> stationDemoList){
+        final Object[][] demoModel = new Object[stationDemoList.size()][4];
+
+        for (int i = 0; i < stationDemoList.size(); i++) {
+            demoModel[i][0] = stationDemoList.get(i).getName();
+            demoModel[i][1] = stationDemoList.get(i).getDate();
+            demoModel[i][2] = "Bericht erstellen";
+        }
+
+        return demoModel;
+    }
+
+    public static Object[][] filteredModel(final Object[][] model,
+                                           final String search) {
+
+        final ArrayList<Object[]> filteredModel = new ArrayList<>();
+        for (Object[] currentStation : model) {
+            final String currentName = (String) currentStation[0];
+
+            if (currentName.toLowerCase().contains(search.toLowerCase())) {
+                filteredModel.add(currentStation);
+            }
+
+            final String currentDate = (String) currentStation[1];
+
+            if (currentDate.toLowerCase().contains(search.toLowerCase())) {
+                filteredModel.add(currentStation);
+            }
+        }
+        return filteredModel.toArray(new Object[0][0]);
+    }
+
     public static Object[][] getDemoModel(){
         final var stationDemoList = Station.getDemoList();
 
@@ -107,6 +135,7 @@ public final class Station{
         TemperatureModel temperatureModel = new TemperatureModel();
         temperatureModel.addEntry(midnight, 15.0);
         temperatureModel.addEntry(midnight + oneHour, 16.0);
+//        temperatureModel.addEntry(midnight + oneHour* 1.5, 17.0);
         temperatureModel.addEntry(midnight + oneHour*2, 17.0);
         temperatureModel.addEntry(midnight + oneHour*3, 18.0);
         temperatureModel.addEntry(midnight + oneHour*4, 17.0);

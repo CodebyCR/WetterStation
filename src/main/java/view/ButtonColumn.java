@@ -1,6 +1,6 @@
 package view;
 
-import environment.CRColor;
+import environment.UI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -51,10 +51,11 @@ public class ButtonColumn extends AbstractCellEditor
 
         renderButton = new JButton();
         editButton = new JButton();
+        editButton.setBorder(BorderFactory.createLineBorder(UI.secundaryColor, 1, true));
         editButton.setFocusPainted( false );
         editButton.addActionListener( this );
         originalBorder = editButton.getBorder();
-        setFocusBorder( new LineBorder(Color.BLUE) );
+        setFocusBorder( new LineBorder(UI.secundaryColor, 1, true) );
 
         TableColumnModel columnModel = table.getColumnModel();
         columnModel.getColumn(column).setCellRenderer( this );
@@ -153,7 +154,7 @@ public class ButtonColumn extends AbstractCellEditor
     {
         if (isSelected)
         {
-            renderButton.setForeground(CRColor.purple);
+            renderButton.setForeground(UI.primaryColor);
             renderButton.setBackground(Color.white);
 //            renderButton.setForeground(table.getSelectionForeground());
 //            renderButton.setBackground(table.getSelectionBackground());

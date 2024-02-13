@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.function.Function;
 
 public class ModalReportWindow extends JFrame {
     /// Constants
@@ -27,10 +28,26 @@ public class ModalReportWindow extends JFrame {
      */
     private final static double yTempOrigen = -7.0;
 
+    private final long ONE_HOUR = 3_600_000;
+    private static final long TWENTY_FOUR_HOURS = 86_400_000;
+
+    private final Function<Long, Long> lastMidNight = (Long date) -> date - (date % TWENTY_FOUR_HOURS);
+
+    private final Function <Long, Long> getHourOfDate = (Long date) -> (date - lastMidNight.apply(date)) / ONE_HOUR;
+
     /**
      * Represent 0' o clock of the current day as Start of the x-axis
      */
-    private final static long xDateOrigin = System.currentTimeMillis() - (System.currentTimeMillis() % 86400000);
+    private final static long xDateOrigin = System.currentTimeMillis() - (System.currentTimeMillis() % TWENTY_FOUR_HOURS);
+
+//    (xDate - date - (date % ONE_DAY)) / ONE_HOUR;
+//    private static long get0ClockOfDate(final long date){
+//        return date - (date % ONE_DAY);
+//    }
+//
+//    private long getHourOfDate(final long date){
+//        return date - get0ClockOfDate(date) / ONE_HOUR;
+//    }
 
     /// Attributes
     private final Station station;
@@ -97,8 +114,8 @@ public class ModalReportWindow extends JFrame {
                 "Zeit",
                 yTempOrigen,
                 30,
-                xDateOrigin,
-                xDateOrigin + 86400000,
+                0, //xDateOrigin,
+                TWENTY_FOUR_HOURS, //xDateOrigin + 86400000,
                 width, //(int) (width * diagrammScale), // 500 * 0.75 = 375
                 374, //(int) (height * diagrammScale), // 500 * 0.75 = 375
                 true
@@ -133,23 +150,32 @@ public class ModalReportWindow extends JFrame {
 //        final int diagrammWidth = (int) (width * diagrammScale);
 
         final double yScale = getYTempScale();
-        System.out.println("yScale: " + yScale);
-
+//        System.out.println("yScale: " + yScale);
+        System.out.println();
         tempModel.enumerate((index, pair) -> {
             final long xDate = pair.first();
             final double yTemp = pair.second();
-//            System.out.println("xDate: " + xDate);
-            System.out.println("yTemp: " + yTemp);
+            System.out.println("xDate: " + xDate);
+//            System.out.println("yTemp: " + yTemp);
+
+
 
             // xDate to hour of the day
-            final long xDateHours = (xDate - xDateOrigin) / 3600000;
-            System.out.println("xDateHours: " + xDateHours);
+            final long xDateHours = getHourOfDate.apply(xDate + ONE_HOUR) ;
+//            final long xDateHours = (xDate - xDateOrigin) / 3_600_000;
 
+            if(index == 24){
+                final long newDateHours = xDateHours +24;
+                System.out.println("Point " + index + ": x=" + newDateHours + " y=" + yTemp);
+                final var currentPoint = new Point((int) newDateHours, (int) yTemp);
+                graphPoints.add(currentPoint);
+            }
+            else{
+                System.out.println("Point " + index + ": x=" + xDateHours + " y=" + yTemp);
+                final var currentPoint = new Point((int) xDateHours, (int) yTemp);
+                graphPoints.add(currentPoint);
+            }
 
-            final var currentPoint = new Point((int) xDateHours, (int) yTemp);
-
-
-            graphPoints.add(currentPoint);
         });
 
         return graphPoints;

@@ -20,7 +20,7 @@ public final class CRColor {
 
     public final static Color blue = new Color(0, 80, 255);
 
-    public final static Color aczentBlue = new Color(0, 80, 255).brighter().brighter();
+    public final static Color accentBlue = new Color(0, 80, 255).brighter().brighter();
 
     public final static Color skyBlue = new Color(0, 200, 255);
 

@@ -1,5 +1,6 @@
 package model;
 
+import environment.utilities.DatabaseHandler;
 import interfaces.Enumerate;
 import model.template.Pair;
 
@@ -9,7 +10,7 @@ import java.util.function.BiConsumer;
 
 
 public class TemperatureModel extends ArrayList<Pair<Long, Double>>
-                                implements Enumerate<BiConsumer<Integer, Pair<Long, Double>>>{
+                              implements Enumerate<BiConsumer<Integer, Pair<Long, Double>>>{
 
     // Attributes
     private final String id;
@@ -19,17 +20,8 @@ public class TemperatureModel extends ArrayList<Pair<Long, Double>>
         this.id = java.util.UUID.randomUUID().toString();
     }
 
-    public static TemperatureModel loadById(String id) {
-        return new TemperatureModel();
-    }
-
-    public static TemperatureModel getDemoModel() {
-        TemperatureModel temperatureModel = new TemperatureModel();
-        temperatureModel.addEntry(System.currentTimeMillis(), 20.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 21.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 22.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 23.0);
-        return temperatureModel;
+    public static TemperatureModel loadById(String stationId) {
+        return DatabaseHandler.loadTemperatureModel(stationId);
     }
 
     /////////////////////////////
@@ -74,23 +66,6 @@ public class TemperatureModel extends ArrayList<Pair<Long, Double>>
         return data;
     }
 
-    public static void main(String[] args) {
-        TemperatureModel temperatureModel = new TemperatureModel();
-        temperatureModel.addEntry(System.currentTimeMillis(), 20.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 21.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 22.0);
-        temperatureModel.addEntry(System.currentTimeMillis(), 23.0);
-
-        temperatureModel.enumerate((index, pair) -> {
-            System.out.println("--------------------");
-            System.out.println("Index: " + index);
-            System.out.println("Date: " + pair.first());
-            System.out.println("Temperature: " + pair.second());
-        });
-
-    }
-
-
     public Double getMin() {
         return this
                 .stream()
@@ -113,5 +88,29 @@ public class TemperatureModel extends ArrayList<Pair<Long, Double>>
                 .mapToDouble(Pair::second)
                 .average()
                 .orElse(Double.NaN);
+    }
+
+    public Long getLastDate() {
+        return this
+                .stream()
+                .mapToLong(Pair::first)
+                .max()
+                .orElse(0);
+    }
+
+    public static void main(String[] args) {
+        TemperatureModel temperatureModel = new TemperatureModel();
+        temperatureModel.addEntry(System.currentTimeMillis(), 20.0);
+        temperatureModel.addEntry(System.currentTimeMillis(), 21.0);
+        temperatureModel.addEntry(System.currentTimeMillis(), 22.0);
+        temperatureModel.addEntry(System.currentTimeMillis(), 23.0);
+
+        temperatureModel.enumerate((index, pair) -> {
+            System.out.println("--------------------");
+            System.out.println("Index: " + index);
+            System.out.println("Date: " + pair.first());
+            System.out.println("Temperature: " + pair.second());
+        });
+
     }
 }

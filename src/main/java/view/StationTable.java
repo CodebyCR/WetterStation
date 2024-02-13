@@ -1,6 +1,5 @@
 package view;
 
-import environment.CRColor;
 import environment.UI;
 
 

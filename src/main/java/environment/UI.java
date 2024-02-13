@@ -2,9 +2,6 @@ package environment;
 
 import java.awt.*;
 
-import static environment.CRColor.coldBlue;
-import static environment.CRColor.hotRed;
-
 public final class UI {
     public final static int FULL_WIDTH = 800;
     public final static int FULL_HEIGHT = 600;
@@ -17,7 +14,7 @@ public final class UI {
 
     public final static String FONT = "Arial"; // "Helvetica"; //"Times New Roman"; // "Arial" "Helvetica"
 
-    public final static Color secundaryColor = CRColor.aczentBlue;//CRColor.cyan;
+    public final static Color secundaryColor = CRColor.accentBlue;//CRColor.cyan;
     public final static Color primaryColor = CRColor.blue;
 
 }

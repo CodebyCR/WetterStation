@@ -26,7 +26,7 @@ public class CreateReportController extends AbstractAction {
         }
 
         final String finalStationName = stationName;
-        final var station = Station.getDemoList().stream()
+        final var station = Station.getStationList().stream()
                 .filter(s -> s.getName().equals(finalStationName))
                 .findFirst()
                 .orElseThrow();

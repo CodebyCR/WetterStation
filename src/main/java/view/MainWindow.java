@@ -4,6 +4,7 @@ import controller.CreateReportController;
 import environment.CRColor;
 import environment.Column;
 import environment.UI;
+import model.CSVProcessor;
 import model.Station;
 
 import javax.swing.*;
@@ -179,6 +180,18 @@ public final class MainWindow extends JFrame{
             if (result == JFileChooser.APPROVE_OPTION) {
                 final var file = fileChooser.getSelectedFile();
                 System.out.println("Selected file: " + file.getAbsolutePath());
+                CSVProcessor.process(file.getAbsolutePath());
+
+                // refresh station table
+                final DefaultTableModel model = new DefaultTableModel(Station.getDemoModel(), new String[]{"Name", "Datum", "Bericht erstellen"});
+                stationTable.setModel(model);
+                stationTable.repaint();
+                final CreateReportController createReportController = new CreateReportController(Station.getDemoModel());
+                final ButtonColumn createReportColumn = new ButtonColumn(stationTable, createReportController, Column.STATION_REPORT);
+                createReportColumn.setMnemonic(KeyEvent.VK_D);
+
+
+
             }
             csvUploadButton.setBackground(UI.secundaryColor);
         });
@@ -197,10 +210,10 @@ public final class MainWindow extends JFrame{
             }
 
             final int selectedRowIndex = stationTable.getSelectedRow();
-            selectedStation = Station.getDemoList().get(selectedRowIndex);
+            selectedStation = Station.getStationList().get(selectedRowIndex);
             System.out.println("Selected: " + selectedStation.getName());
             final var stationReport = selectedStation.getTemperatureModel();
-            stationReport.addEntry(System.currentTimeMillis(), 20.0);
+//            stationReport.addEntry(System.currentTimeMillis(), 20.0);
 
 
             final var currentStationHeader = new String[]{"Datum", "Temperatur"};
@@ -330,10 +343,6 @@ public final class MainWindow extends JFrame{
 
 
         return selectionPanel;
-    }
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() ->new MainWindow(Station.getDemoModel()));
     }
 
 }

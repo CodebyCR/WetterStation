@@ -160,7 +160,7 @@ public class CoordinateSystem extends JPanel {
         final int pointSize = 8;
         final int pointSizeHalf = pointSize / 2;
         final int yOffset = 100;
-        final int xOffset = 67 - pointSizeHalf;
+        final int xOffset = 50 - pointSizeHalf;
 //        final int coordinateSystemWidth = 301;
         final double hourCount = 24.0;
 
